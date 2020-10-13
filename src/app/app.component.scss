@@ -1,18 +1,29 @@
-.gradient.young-passion {
-  background: rgb(233,30,99);
-  background: linear-gradient(90deg, rgba(233,30,99,1) 39%, rgba(83,109,254,1) 100%);
-}
-.mat-toolbar {
-  color: #fff;
-}
-.title {
-  text-transform: uppercase;
-}
-.sidebar-container {
+.root {
   position: absolute;
   top: 0;
   right: 0;
-  bottom: 0;
   left: 0;
-  background: #000a;
+  bottom: 0;
+}
+
+.background-gradient {
+  background: rgb(233, 30, 99);
+  background: linear-gradient(90deg, rgba(233, 30, 99, 1) 39%, rgba(83, 109, 254, 1) 100%);
+}
+
+.mat-toolbar {
+  color: #fff;
+}
+
+.title {
+  text-transform: uppercase;
+}
+
+.sidebar-container {
+  width: 200px;
+  .heading {
+    padding: 22px;
+    font-size: 20px;
+    color: #fff;
+  }
 }

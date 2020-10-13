@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
+import {MatSidenav} from "@angular/material/sidenav";
 
 @Component({
   selector: 'app-root',
@@ -11,10 +12,14 @@ export class AppComponent {
   events: string[] = [];
   opened: boolean;
 
-  shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));
-  sidenav: any;
+  @ViewChild('sidenav') sidenav: MatSidenav;
 
   toggleSidebar() {
     this.isSideBarOpen = true
+  }
+  toggle() {
+    this.sidenav.toggle().then(r => {
+      console.log('asd', r)
+    });
   }
 }

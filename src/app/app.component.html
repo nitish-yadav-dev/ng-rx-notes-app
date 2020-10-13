@@ -1,16 +1,15 @@
-<div>
-  <mat-sidenav-container class="example-container" *ngIf="true">
-  </mat-sidenav-container>
-  <mat-toolbar class="gradient young-passion">
-    <div class="sidebar-container" (click)="sidenav.toggle()" *ngIf="opened">
-      <mat-sidenav #sidenav mode="side" [(opened)]="opened">
-        Sidenav content temp
-      </mat-sidenav>
-    </div>
-    <button mat-icon-button (click)="sidenav.toggle(); opened = !opened" class="example-icon"
-            aria-label="Example icon-button with menu icon">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <span class="title">Notes</span>
-  </mat-toolbar>
-</div>
+<mat-sidenav-container class="root" *ngIf="true">
+  <mat-sidenav #sidenav mode="over" class="sidebar-container">
+    <div class="background-gradient heading">Filter</div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar class="background-gradient">
+      <button mat-icon-button (click)="sidenav.toggle(); opened = !opened" class="example-icon"
+              aria-label="Example icon-button with menu icon">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="title">Notes</span>
+    </mat-toolbar>
+  </mat-sidenav-content>
+</mat-sidenav-container>
