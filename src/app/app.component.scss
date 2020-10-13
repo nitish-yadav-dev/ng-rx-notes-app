@@ -19,3 +19,70 @@
 .sidebar-container {
   width: 140px;
 }
+
+.main-content {
+  padding: 15px;
+}
+
+.chalkboard {
+  box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.40);
+  background: #fff;
+
+  .editable {
+    width: 98%;
+    margin: auto;
+    padding: 10px 0;
+    background: #fff;
+    textarea {
+      width: 100%;
+      border: 0;
+      font-size: 16px;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 400;
+      &:focus {
+        border: 0;
+        outline: none;
+      }
+      &::placeholder {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 16px;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: nowrap;
+
+  .card {
+    display: inline-block;
+    height: 20px;
+    width: -webkit-fill-available;
+
+    &.blue {
+      background-color: $blue;
+    }
+
+    &.indigo {
+      background-color: $indigo;
+    }
+
+    &.red {
+      background-color: $red;
+    }
+
+    &.green {
+      background-color: $green;
+    }
+
+    &.yellow {
+      background-color: $yellow;
+    }
+
+    &.cyan {
+      background-color: $cyan;
+    }
+  }
+}

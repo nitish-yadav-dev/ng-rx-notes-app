@@ -11,10 +11,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule} from "@angular/material/button";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {ComponentsModule} from "./components/components.module";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
@@ -26,6 +30,9 @@ import {ComponentsModule} from "./components/components.module";
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
+    MatFormFieldModule,
+    MatInputModule,
+    // components
     ComponentsModule
   ],
   providers: [],
