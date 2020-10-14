@@ -1,11 +1,12 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
-import {addNote} from './store/notes.actions';
+import {addNote, updateNote, deleteNote} from './store/notes.actions';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 export interface DialogData {
+  edited: any;
   index: any;
   text: string;
   name: string;
@@ -47,7 +48,6 @@ export class AppComponent implements OnInit {
     let note = {text: this.noteEditor, time: new Date(), noteBadge};
     this.store.dispatch(addNote(note));
     this.notes$.subscribe(e => {
-      console.log('e', e);
       // @ts-ignore
       this.notesList = e.notesList
       this.noteEditor = '';
@@ -71,7 +71,6 @@ export class AppComponent implements OnInit {
 
   handleNotesVisibility(visibleNotesType: any) {
     this.notes$.subscribe(e => {
-      console.log('e', e);
       // @ts-ignore
       this.notesList = e.notesList
       if (visibleNotesType === 'all') {
@@ -91,8 +90,29 @@ export class AppComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
+      if (result.type === 'update') {
+        this.updateNote(result.data);
+      }
+      if (result.type === 'delete') {
+        this.deleteNote(result.index);
+      }
     });
+  }
+
+  private updateNote(data: any) {
+    let note = {text: data.text, time: data.time, noteBadge: data.noteBadge, index: data.index};
+    this.store.dispatch(updateNote(note));
+    this.notes$.subscribe(e => {
+      // @ts-ignore
+      this.notesList = e.notesList
+      this.noteEditor = '';
+      this.showSnackBar('Note Updated', 'UNDO');
+    })
+  }
+
+  private deleteNote(index: any) {
+    this.store.dispatch(deleteNote(index));
+    this.showSnackBar('Note Deleted', 'UNDO');
   }
 }
 
@@ -103,23 +123,24 @@ export class AppComponent implements OnInit {
 
 export class DialogOverviewExampleDialog implements OnInit {
 
-  ngOnInit() {
-    console.log(this.data);
-  }
-  noteEditor: any;
-
   constructor(
     public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData) {
   }
 
   updateNote(noteBadge: string) {
+    // @ts-ignore
+    let text = document.getElementById('noteUpdateEditor').value
     let obj = {
-      text: this.data.text,
+      text,
       noteBadge,
       time: new Date(),
       index: this.data.index
     }
-    this.dialogRef.close(obj);
+    this.dialogRef.close({type: 'update', data: obj});
+  }
+
+  deleteNote() {
+    this.dialogRef.close({type: 'delete', index: this.data.index});
   }
 }
