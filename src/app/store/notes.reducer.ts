@@ -15,7 +15,7 @@ export const notesReducer: ActionReducer<any> = (state = initialNotesData, actio
       let notesList = [...state.notesList];
       // @ts-ignore
       notesList.push(action.note);
-      notesList.shift();
+      // notesList.shift();
       Cookies.set('ngrx-notes', notesList, { expires: 3 })
       state = Object.assign({}, state, {notesList});
       return state
