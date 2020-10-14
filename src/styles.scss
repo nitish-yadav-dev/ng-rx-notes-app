@@ -12,6 +12,7 @@ body { margin: 0; font-family: 'Open Sans', sans-serif; }
     display: inline-block;
     height: 100%;
     width: -webkit-fill-available;
+    width: -moz-available;
 
     &.blue {
       background-color: $blue;
