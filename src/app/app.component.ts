@@ -1,7 +1,7 @@
 import {Component, OnInit, Inject} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
-import {addNote, updateNote, deleteNote} from './store/notes.actions';
+import {addNote, updateNote, deleteNote, undoAddNote, undoUpdateNote, undoDeleteNote} from './store/notes.actions';
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
@@ -39,6 +39,7 @@ export class AppComponent implements OnInit {
   noteEditor: any;
   notesList: any = [];
   filteredNotesList: any;
+  lastAction: any;
 
   createNote(noteBadge) {
     if (this.noteEditor === undefined || this.noteEditor.trim() === '') {
@@ -49,16 +50,38 @@ export class AppComponent implements OnInit {
     this.store.dispatch(addNote(note));
     this.notes$.subscribe(e => {
       // @ts-ignore
-      this.notesList = e.notesList
       this.noteEditor = '';
-      this.showSnackBar('Note Added', 'UNDO');
     })
+    this.showSnackBar('Note Added', 'UNDO');
   }
 
   showSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2000,
-    });
+    if (message === 'Note Added') {
+      let snackBarRef = this._snackBar.open(message, action, {
+        duration: 2000,
+      });
+      snackBarRef.onAction().subscribe(() => {
+        this.store.dispatch(undoAddNote(null));
+      });
+    } else if (message === 'Note Updated') {
+      let snackBarRef = this._snackBar.open(message, action, {
+        duration: 2000,
+      });
+      snackBarRef.onAction().subscribe(() => {
+        if (this.lastAction.type === "update") {
+          this.store.dispatch(undoUpdateNote(this.lastAction.note));
+        }
+      });
+    } else if (message === 'Note Deleted') {
+      let snackBarRef = this._snackBar.open(message, action, {
+        duration: 2000,
+      });
+      snackBarRef.onAction().subscribe(() => {
+        if (this.lastAction.type === "delete") {
+          this.store.dispatch(undoDeleteNote(this.lastAction.note));
+        }
+      });
+    }
   }
 
   getFormattedDate(date) {
@@ -101,16 +124,18 @@ export class AppComponent implements OnInit {
 
   private updateNote(data: any) {
     let note = {text: data.text, time: data.time, noteBadge: data.noteBadge, index: data.index};
+    this.lastAction = Object.assign({}, {type: 'update', note: this.notesList[data.index] })
     this.store.dispatch(updateNote(note));
     this.notes$.subscribe(e => {
       // @ts-ignore
-      this.notesList = e.notesList
       this.noteEditor = '';
-      this.showSnackBar('Note Updated', 'UNDO');
-    })
+    });
+    this.showSnackBar('Note Updated', 'UNDO');
   }
 
   private deleteNote(index: any) {
+    let note = Object.assign({}, this.notesList[index], {index});
+    this.lastAction = Object.assign({}, {type: 'delete', note });
     this.store.dispatch(deleteNote(index));
     this.showSnackBar('Note Deleted', 'UNDO');
   }
@@ -121,7 +146,7 @@ export class AppComponent implements OnInit {
   templateUrl: 'dialog-overview-example-dialog.html',
 })
 
-export class DialogOverviewExampleDialog implements OnInit {
+export class DialogOverviewExampleDialog {
 
   constructor(
     public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
