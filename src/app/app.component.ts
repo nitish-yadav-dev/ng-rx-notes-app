@@ -30,13 +30,14 @@ export class AppComponent implements OnInit {
   notesList: any = [];
 
   createNote(noteBadge) {
-    this.isChalkboardInUse = !this.isChalkboardInUse
     let note = {text: this.noteEditor, time: new Date(), noteBadge};
     this.store.dispatch(addNote(note));
     this.notes$.subscribe(e => {
       console.log('e', e);
       // @ts-ignore
       this.notesList = e.notesList
+      this.noteEditor = '';
+      this.isChalkboardInUse = !this.isChalkboardInUse
     })
   }
 
