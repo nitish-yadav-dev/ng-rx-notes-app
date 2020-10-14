@@ -13,8 +13,9 @@ import {MatSidenavModule} from "@angular/material/sidenav";
 import {ComponentsModule} from "./components/components.module";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import { SidebarComponent } from './sidebar/sidebar.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
+import { SidebarComponent } from './sidebar/sidebar.component';
 import { notesReducer } from './store/notes.reducer';
 import {FormsModule} from "@angular/forms";
 
@@ -35,6 +36,7 @@ import {FormsModule} from "@angular/forms";
     MatSidenavModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSnackBarModule,
     // components
     ComponentsModule,
     FormsModule

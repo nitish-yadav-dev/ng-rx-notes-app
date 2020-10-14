@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import {Store} from '@ngrx/store';
+import {Observable} from 'rxjs';
 import {addNote} from './store/notes.actions';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-root',
@@ -16,10 +17,11 @@ export class AppComponent implements OnInit {
 
   notes$: Observable<number>
 
-  constructor(private store: Store<{ notes: any }>, ) {
+  constructor(private store: Store<{ notes: any }>, private _snackBar: MatSnackBar) {
     // TODO: This stream will connect to the current store `notes` state
     this.notes$ = store.select('notes');
   }
+
   title = 'NgRx-Notes-App';
   isChalkboardInUse: boolean = false
   noteEditor: any;
@@ -27,6 +29,10 @@ export class AppComponent implements OnInit {
   filteredNotesList: any;
 
   createNote(noteBadge) {
+    if (this.noteEditor === undefined || this.noteEditor.trim() === '') {
+      return
+    }
+    this.isChalkboardInUse = !this.isChalkboardInUse
     let note = {text: this.noteEditor, time: new Date(), noteBadge};
     this.store.dispatch(addNote(note));
     this.notes$.subscribe(e => {
@@ -34,18 +40,22 @@ export class AppComponent implements OnInit {
       // @ts-ignore
       this.notesList = e.notesList
       this.noteEditor = '';
-      this.isChalkboardInUse = !this.isChalkboardInUse
+      this.showSnackBar('Note Added', 'UNDO');
     })
   }
 
+  showSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+    });
+  }
+
   getFormattedDate(date) {
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const months = ['Jan', 'Fab', 'Mar', 'April', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
     let d = new Date(date);
-    let dayName = days[d.getDay()];
     let monthName = months[d.getMonth()];
     let year = d.getFullYear();
-    return monthName + ' ' + dayName + ' ' + year
+    return monthName + ' ' + d.getDate() + ' ' + year
   }
 
   handleNotesVisibility(visibleNotesType: any) {
