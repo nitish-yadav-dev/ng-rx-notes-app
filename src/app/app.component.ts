@@ -11,11 +11,7 @@ import {addNote} from './store/notes.actions';
 
 export class AppComponent implements OnInit {
   ngOnInit() {
-    this.notes$.subscribe(e => {
-      console.log('e', e);
-      // @ts-ignore
-      this.notesList = e.notesList
-    })
+    this.handleNotesVisibility('all');
   }
 
   notes$: Observable<number>
@@ -28,6 +24,7 @@ export class AppComponent implements OnInit {
   isChalkboardInUse: boolean = false
   noteEditor: any;
   notesList: any = [];
+  filteredNotesList: any;
 
   createNote(noteBadge) {
     let note = {text: this.noteEditor, time: new Date(), noteBadge};
@@ -49,5 +46,20 @@ export class AppComponent implements OnInit {
     let monthName = months[d.getMonth()];
     let year = d.getFullYear();
     return monthName + ' ' + dayName + ' ' + year
+  }
+
+  handleNotesVisibility(visibleNotesType: any) {
+    this.notes$.subscribe(e => {
+      console.log('e', e);
+      // @ts-ignore
+      this.notesList = e.notesList
+      if (visibleNotesType === 'all') {
+        this.filteredNotesList = this.notesList
+      } else {
+        this.filteredNotesList = this.notesList.filter(e => {
+          return e.noteBadge === visibleNotesType
+        })
+      }
+    })
   }
 }

@@ -1,6 +1,6 @@
 <mat-sidenav-container class="root" *ngIf="true">
   <mat-sidenav #sidenav mode="over" class="sidebar-container">
-    <app-sidebar></app-sidebar>
+    <app-sidebar (visibleNotes)="handleNotesVisibility($event); sidenav.toggle();"></app-sidebar>
   </mat-sidenav>
 
   <mat-sidenav-content>
@@ -29,7 +29,7 @@
         </div>
       </div>
       <div class="notes-card-container">
-        <div *ngFor="let note of notesList" class="notes-card" [class]="note.noteBadge">
+        <div *ngFor="let note of filteredNotesList" class="notes-card" [class]="note.noteBadge">
           <div>{{note.text}}</div>
           <span class="note-time">{{getFormattedDate(note.time)}}</span>
         </div>
