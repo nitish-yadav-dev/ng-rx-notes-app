@@ -1,8 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Inject} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
 import {addNote} from './store/notes.actions';
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
+export interface DialogData {
+  index: any;
+  text: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-root',
@@ -11,13 +18,17 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 
 export class AppComponent implements OnInit {
+
+  animal: string;
+  name: string;
+
   ngOnInit() {
     this.handleNotesVisibility('all');
   }
 
   notes$: Observable<number>
 
-  constructor(private store: Store<{ notes: any }>, private _snackBar: MatSnackBar) {
+  constructor(private store: Store<{ notes: any }>, private _snackBar: MatSnackBar, public dialog: MatDialog) {
     // TODO: This stream will connect to the current store `notes` state
     this.notes$ = store.select('notes');
   }
@@ -71,5 +82,44 @@ export class AppComponent implements OnInit {
         })
       }
     })
+  }
+
+  openDialog(text, index): void {
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '250px',
+      data: {text, index}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+    });
+  }
+}
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'dialog-overview-example-dialog.html',
+})
+
+export class DialogOverviewExampleDialog implements OnInit {
+
+  ngOnInit() {
+    console.log(this.data);
+  }
+  noteEditor: any;
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {
+  }
+
+  updateNote(noteBadge: string) {
+    let obj = {
+      text: this.data.text,
+      noteBadge,
+      time: new Date(),
+      index: this.data.index
+    }
+    this.dialogRef.close(obj);
   }
 }

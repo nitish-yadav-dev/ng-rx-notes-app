@@ -14,6 +14,7 @@ import {ComponentsModule} from "./components/components.module";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatDialogModule} from "@angular/material/dialog";
 
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { notesReducer } from './store/notes.reducer';
@@ -37,6 +38,7 @@ import {FormsModule} from "@angular/forms";
     MatFormFieldModule,
     MatInputModule,
     MatSnackBarModule,
+    MatDialogModule,
     // components
     ComponentsModule,
     FormsModule

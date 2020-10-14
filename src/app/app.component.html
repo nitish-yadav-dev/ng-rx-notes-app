@@ -14,7 +14,7 @@
     <div class="main-content">
       <div class="chalkboard">
         <div class="editable">
-          <textarea
+          <textarea class="editor"
             (focusin)="isChalkboardInUse = true" [(ngModel)]="noteEditor"
             placeholder="Take a note" matInput>
           </textarea>
@@ -29,7 +29,8 @@
         </div>
       </div>
       <div class="notes-card-container">
-        <div *ngFor="let note of filteredNotesList" class="notes-card" [class]="note.noteBadge">
+        <div *ngFor="let note of filteredNotesList; let i = index" class="notes-card" [class]="note.noteBadge"
+             (click)="openDialog(note.text, i)">
           <div>{{note.text}}</div>
           <span class="note-time">{{getFormattedDate(note.time)}}</span>
         </div>
